@@ -1,8 +1,16 @@
-from bedrock import ask
+import logging
+from logging_setup import setup
 from formatters import format_sources
 from botocore.exceptions import ClientError, BotoCoreError
+from bedrock.factory import get_rag_client
+from settings import settings
+
+log = logging.getLogger(__name__)
+setup(level=settings.log_level)
 
 def main():
+    
+    rag_client = get_rag_client()
     session_id = None
     print("Tax assistant. /new /quit. Not professional tax advice.")
 
@@ -19,7 +27,8 @@ def main():
         if question in ("/quit", "/q", "quit"):
             break
         try:
-            result = ask(question, session_id=session_id)
+            result = rag_client.ask(question, session_id=session_id)
+            print(result)
         except ClientError as e:
             code = e.response.get("Error, {}").get("Code", "Unknown")
             if code in {"ThrottlingException", "TooManyRequestsException"}:
@@ -38,8 +47,8 @@ def main():
             print("Network problem reaching Bedrock. Retry.")
             continue
         
-        print(result["answer"])
+        print(result.answer)
 
-        print("SOURCES: \n",format_sources(result["citations"]))
+        print("SOURCES: \n",format_sources(result.citations))
         
-        session_id = result["session_id"]
+        session_id = result.session_id

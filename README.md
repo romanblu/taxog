@@ -2,7 +2,6 @@
 
 CLI tax Q&A assistant powered by [Amazon Bedrock Knowledge Base](https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html). Answers are grounded in your uploaded tax documents using retrieval-augmented generation (RAG), with source citations and multi-turn conversation support.
 
-> **Disclaimer:** This tool provides general information from documents in the knowledge base. It is **not** professional tax, legal, or financial advice. Always verify with a qualified tax professional for your specific situation.
 
 ## Features
 
